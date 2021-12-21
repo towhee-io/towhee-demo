@@ -8,9 +8,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "@sentry/nextjs": "^6.16.1",
+    "@sentry/react": "^6.16.1",
+    "amplitude-js": "^8.13.1",
+    "axios": "^0.24.0",
+    "cropperjs": "^1.5.12",
+    "gestalt": "^41.0.6",
     "next": "12.0.7",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-file-drop": "^3.1.3",
+    "uuidv4": "^6.2.12"
   },
   "devDependencies": {
     "@types/node": "17.0.1",

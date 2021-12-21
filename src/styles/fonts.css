@@ -1,0 +1,52 @@
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-Regular.eot");
+  src: url("/fonts/Poppins-Regular.woff") format("woff"),
+    url("/fonts/Poppins-Regular.ttf") format("truetype"),
+    url("/fonts/Poppins-Regular.woff2") format("woff2");
+
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Poppins Bold";
+  src: url("/fonts/Poppins-Bold.eot");
+  src: url("/fonts/Poppins-Bold.woff") format("woff"),
+    url("/fonts/Poppins-Bold.ttf") format("truetype"),
+    url("/fonts/Poppins-Bold.woff2") format("woff2");
+
+  font-weight: "bold";
+  font-style: normal;
+}
+@font-face {
+  font-family: "Lato";
+  src: url("/fonts/Lato-Regular.eot");
+  src: url("/fonts/Lato-Regular.woff") format("woff"),
+    url("/fonts/Lato-Regular.ttf") format("truetype"),
+    url("/fonts/Lato-Regular.woff2") format("woff2");
+
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lato Bold";
+  src: url("/fonts/Lato-Bold.eot");
+  src: url("/fonts/Lato-Bold.woff") format("woff"),
+    url("/fonts/Lato-Bold.ttf") format("truetype"),
+    url("/fonts/Lato-Bold.woff2") format("woff2");
+
+  font-weight: "bold";
+  font-style: normal;
+}
+@font-face {
+  font-family: "Merriweather";
+  src: url("/fonts/Merriweather-Regular.eot");
+  src: url("/fonts/Merriweather-Regular.woff") format("woff"),
+    url("/fonts/Merriweather-Regular.ttf") format("truetype"),
+    url("/fonts/Merriweather-Regular.woff2") format("woff2");
+
+  font-weight: 400;
+  font-style: normal;
+}
