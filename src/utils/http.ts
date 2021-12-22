@@ -1,24 +1,27 @@
 import axios from 'axios';
+import { SearchPrams } from '../types';
+import qs from 'qs';
 
 export const DEMOS_BASE_URL = process.env.BASE_API_URL;
-console.log(DEMOS_BASE_URL)
+console.log('DEMOS_BASE_URL--', DEMOS_BASE_URL);
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://demos.zilliz.com',
+  baseURL: 'http://172.16.20.41:5000/',
   timeout: 300000,
 });
 
 export const search = async (
   formData: FormData,
-  isCn: boolean
+  params: SearchPrams
 ): Promise<any> => {
-  const url = `${isCn ? 'cn' : 'en'}_img_serh/api/v1/search`;
+  const queryParams = qs.stringify(params);
+  const url = `/search?${queryParams}`;
   const res = await axiosInstance.post(url, formData);
   return res.data;
 };
 
-export const getCount = async (isCn: boolean): Promise<number> => {
-  const url = `${isCn ? 'cn' : 'en'}_img_serh/api/v1/count`;
+export const getCount = async (tableName: string): Promise<number> => {
+  const url = `/count?table_name=${tableName}`;
   const res = await axiosInstance.post(url);
   return res.data;
 };

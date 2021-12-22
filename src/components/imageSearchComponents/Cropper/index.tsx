@@ -75,7 +75,12 @@ const CroppeDemo = props => {
     }
     cropperInstance.getCroppedCanvas().toBlob(
       blob => {
-        propSend(blob, true, null);
+        propSend({
+          file: blob,
+          reset: true,
+          scrollPage: null,
+          isSelected: true,
+        });
       } /*, 'image/png' */
     );
   };

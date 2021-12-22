@@ -18,6 +18,7 @@
     "cropperjs": "^1.5.12",
     "gestalt": "^41.0.6",
     "next": "12.0.7",
+    "qs": "^6.10.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-file-drop": "^3.1.3",

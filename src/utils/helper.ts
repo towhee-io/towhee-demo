@@ -5,7 +5,6 @@ type Base64ImageType = {
   type: string;
 };
 
-
 export const getImgUrl: (param: File | Blob) => string = file => {
   let url: string = '';
   if (URL.createObjectURL) {
@@ -67,23 +66,36 @@ export const formatCount = (count: number) => {
   return res.reverse().join(',');
 };
 
-
 export const formatImgData = async (
-    list: ImageSearchDemoListType,
-    setFunc: React.Dispatch<React.SetStateAction<any[]>>
-  ) => {
-    const results = list.map(item => {
-      const distance = item[1] ? item[1].toFixed(6) : 0;
-      const src = item[0][0];
-      const origin_src = src.replace(/pc_suo_|mobile_suo_/g, '');
-      const [width, height] = item[0][1].split('X');
-      return {
-        distance,
-        src,
-        width: Number(width),
-        height: Number(height),
-        origin_src,
-      };
-    });
-    setFunc(v => [...v, ...results]);
-  };
+  list: ImageSearchDemoListType,
+  setFunc: React.Dispatch<React.SetStateAction<any[]>>
+) => {
+  const results = list.map(item => {
+    const distance = item[1] ? item[1].toFixed(6) : 0;
+    const src = item[0][0];
+    const origin_src = src.replace(/pc_suo_|mobile_suo_/g, '');
+    const [width, height] = item[0][1].split('X');
+    return {
+      distance,
+      src,
+      width: Number(width),
+      height: Number(height),
+      origin_src,
+    };
+  });
+  setFunc(v => [...v, ...results]);
+};
+
+export const dataURLtoFile = (dataurl, filename) => {
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, {
+    type: mime,
+  });
+};

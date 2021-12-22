@@ -13,113 +13,26 @@ import {
   getBase64Image,
   formatCount,
   formatImgData,
+  getImgUrl,
+  dataURLtoFile,
 } from '../../utils/helper';
 import Masonry from '../../components/imageSearchComponents/Masonry';
 import { search, getCount } from '../../utils/http';
 import UploaderHeader from '../../components/imageSearchComponents/Uploader';
-import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useCheckIsMobile } from '../../hooks/Style';
-
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 // import { imageSearchDemo } from '../../../seo/page-description';
 import 'gestalt/dist/gestalt.css';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: '100%',
-    height: 'calc(100vh - 80px)',
-    overflow: 'auto',
-    [theme.breakpoints.down('sm')]: {
-      height: 'calc(100vh - 60px)',
-    },
-  },
-
-  backLink: {
-    display: 'flex',
-    color: '#000',
-    alignItems: 'center',
-    marginBottom: '27px',
-
-    [theme.breakpoints.down('sm')]: {
-      marginBottom: theme.spacing(1),
-    },
-
-    '& .back-btn': {
-      padding: 0,
-      color: '#000',
-      fontSize: '18px',
-      fontWeight: 500,
-      lineHeight: '24px',
-      marginLeft: theme.spacing(1),
-    },
-  },
-  container: {
-    display: 'flex',
-    maxWidth: '1440px',
-    width: '100%',
-    padding: theme.spacing(3, 12.5, 0),
-    margin: '0 auto',
-    boxSizing: 'border-box',
-
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3, 2, 0),
-    },
-  },
-
-  contentContainer: {
-    flex: 1,
-  },
-
-  codeContainer: {
-    flex: 1,
-    background: '#303030',
-    borderRadius: '16px',
-    marginLeft: '20px',
-  },
-
-  uploadSection: {
-    width: '100%',
-    border: '1px dashed #000',
-    padding: theme.spacing(9, 9),
-    borderRadius: '4px',
-    boxSizing: 'border-box',
-
-    '& .desc': {
-      fontWeight: 400,
-      fontSize: '24px',
-      lineHeight: '28px',
-      color: '#82838E',
-      textAlign: 'center',
-      marginBottom: theme.spacing(5),
-    },
-  },
-  uploadWrapper: {
-    textAlign: 'center',
-    '& .input': {
-      display: 'none',
-    },
-  },
-  layoutSection: {},
-  loadingWrapper: {
-    position: 'fixed',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    background: 'rgba(0, 0, 0, 0.3)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-}));
+import { DeviceType } from '../../types';
+import { useStyles } from './style';
 
 const Home = () => {
   formatCount(134200);
   const classes = useStyles();
   const { setDialog, dialog } = useContext(rootContext);
   const [imgs, setImgs] = useState<any[]>([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [partialLoading, setPartialLoading] = useState(false);
   const [selected, setSelected] = useState({
@@ -135,31 +48,52 @@ const Home = () => {
   const scrollContainer = useRef(null);
   const isMobile = useCheckIsMobile();
   const [isNeedLoadMore, setIsNeedLoadMore] = useState(false);
-  const { query } = useRouter();
-  const isCn = query.lan === 'cn';
 
-  const handleImgSearch = async (
-    file: File | Blob,
-    reset = false,
-    scrollPage: number | null
-  ) => {
+  const handleSelectedImg = (file: File | Blob) => {
+    setFile(file);
+    const src = getImgUrl(file);
+    setSelected({
+      src,
+      isSelected: true,
+    });
+  };
+
+  const handleImgSearch = async <
+    T extends {
+      file: File | Blob;
+      reset: boolean;
+      scrollPage: number | null;
+      isSelected: boolean;
+    }
+  >({
+    file,
+    reset,
+    scrollPage,
+    isSelected,
+  }: any) => {
     setLoading(true);
     setDuration('searching...');
     let tempPage = page;
     if (reset) {
       setImgs([]);
-      setPage(0);
-      tempPage = 0;
+      setPage(1);
+      tempPage = 1;
       setNoData(false);
     }
+    if (isSelected) {
+      handleSelectedImg(file);
+    }
     const fd = new FormData();
-    fd.append('file', file);
-    fd.append('Num', `${window.innerWidth < 800 ? 16 : 50}`);
-    fd.append('Page', `${scrollPage || tempPage}`);
-    fd.append('Device', `${isMobile ? 1 : 0}`);
+    fd.append('image', file);
+    const params = {
+      table_name: 'resnet101',
+      device: `${isMobile ? 'mobile' : 'pc'}` as DeviceType,
+      page: scrollPage || tempPage,
+      num: window.innerWidth < 800 ? 16 : 50,
+    };
 
     try {
-      const [res, duration = 0] = await search(fd, isCn);
+      const [duration = 0, res] = await search(fd, params);
       setDuration(Number.prototype.toFixed.call(duration, 4));
       if (!res.length) {
         setNoData(true);
@@ -179,10 +113,22 @@ const Home = () => {
     const image = document.createElement('img');
     image.crossOrigin = '';
     image.src = src;
-    image.onload = function () {
+    image.onload = async () => {
       const base64 = getBase64Image(image);
       const imgBlob = convertBase64UrlToBlob(base64);
-      handleImgSearch(imgBlob, reset, null);
+
+      const file = new File([base64.dataURL], 'blob', {
+        type: 'image/jpeg',
+      });
+
+      console.log('copyfile----', file);
+
+      handleImgSearch({
+        file: base64.dataURL,
+        reset,
+        scrollPage: null,
+        isSelected: false,
+      });
       setFile(imgBlob);
     };
   };
@@ -192,7 +138,12 @@ const Home = () => {
     async () => {
       try {
         setPartialLoading(true);
-        await handleImgSearch(file, false, page);
+        await handleImgSearch({
+          file,
+          reset: false,
+          scrollPage: page,
+          isSelected: false,
+        });
       } catch (error) {
         console.log(error);
       } finally {
@@ -202,14 +153,6 @@ const Home = () => {
     // eslint-disable-next-line
     [file, page]
   );
-
-  const handleSelectedImg = (file: File | Blob, src: string) => {
-    setFile(file);
-    setSelected({
-      src: src,
-      isSelected: true,
-    });
-  };
 
   const toggleIsShowCode = () => {
     setIsShowCode(v => !v);
@@ -231,7 +174,7 @@ const Home = () => {
   );
 
   const getImgsCount = async () => {
-    const count = await getCount(isCn);
+    const count = await getCount('resnet101');
     setCount(formatCount(count));
   };
 
@@ -274,7 +217,7 @@ const Home = () => {
               }
             />
             <UploaderHeader
-              handleImgSearch={handleImgSearch}
+              searchImg={handleImgSearch}
               handleSelectedImg={handleSelectedImg}
               toggleIsShowCode={toggleIsShowCode}
               selectedImg={selected.src}
