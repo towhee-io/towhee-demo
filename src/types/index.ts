@@ -1,15 +1,16 @@
 export type UploaderHeaderType = {
-  searchImg: (params: {
-    file: File;
-    reset: boolean;
-    scrollPage: number | null;
-    isSelected: boolean;
-  }) => void;
+  searchImg: (file: File, reset: boolean, scrollPage: number | null) => void;
   handleSelectedImg: (file: File, src: string) => void;
   toggleIsShowCode: () => void;
-  selectedImg: string;
+  selectedImg: {
+    src: string;
+    isSelected: boolean;
+  };
   count: string;
   duration: number | string;
+  modelOptions: any;
+  model: any;
+  setModel: any;
 };
 
 export interface SearchPrams {

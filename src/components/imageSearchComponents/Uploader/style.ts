@@ -1,4 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { PinDropSharp } from '@material-ui/icons';
 
 export const useStyles = makeStyles((theme: Theme) => ({
   uploadSection: {
@@ -90,8 +91,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     height: '232px',
 
     '& img': {
-      maxWidth: '247px',
-      maxHeigth: '232px',
+      width: '100%',
+      // height: (prop: any) => `${247 / prop.selectedImg.ratio}px`,
+      height: '100%',
     },
 
     [theme.breakpoints.down('sm')]: {

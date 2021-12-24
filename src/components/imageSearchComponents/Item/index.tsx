@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Image } from 'gestalt';
 import { makeStyles, Theme } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
@@ -110,26 +110,32 @@ type ItemPropsType = {
     width: number;
     src: string;
     distance: number;
-    origin_src: string;
   };
   isSelected: boolean;
-  handleSearch: (param: string) => void;
+  handleSearch: (param: string, ratio: number) => void;
+  model: string;
 };
 const Item: React.FC<ItemPropsType> = props => {
   const {
-    data: { height, width, src, distance, origin_src },
+    data: { height, width, src, distance },
+    model,
   } = props;
+
+  const ratio = width / height;
+  const image_path = src.replace(/(pc|mobile)\?/, `raw?table_name=${model}`);
+
   const { setPreviewDialog, handleClosePreviewDialog } =
     useContext(rootContext);
   const classes = useStyles();
 
-  const handlePreview = () => {
+  const handlePreview = async () => {
     setPreviewDialog({
       open: true,
       component: (
         <PreviewItem
-          src={origin_src}
+          src={image_path}
           distance={distance}
+          ratio={width / height}
           handleSearch={props.handleSearch}
         />
       ),
@@ -139,7 +145,8 @@ const Item: React.FC<ItemPropsType> = props => {
 
   const searchThisPic = (e: React.MouseEvent<HTMLSpanElement>, src: string) => {
     e.stopPropagation();
-    props.handleSearch(src);
+    console.log('image_path=--', image_path);
+    props.handleSearch(image_path, ratio);
   };
 
   return (

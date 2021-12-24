@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import {
   Button,
   Typography,
@@ -22,35 +22,21 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
   selectedImg,
   count,
   duration,
+  modelOptions,
+  model,
+  setModel,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({ selectedImg });
   const isMobile = useCheckIsMobile();
   const inputRef = useRef<HTMLInputElement>(null!);
   const uploadSection = useRef(null);
 
-  const [modelOptions, setModelOptions] = useState<string[]>([
-    'resnet50',
-    'resnet101',
-    'efficientnetb5',
-    'efficientnetb7',
-    'swinbase',
-    'swinlarge',
-    'vitlarge',
-  ]);
-  const [model, setModel] = useState<string>(modelOptions[0]);
-
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = inputRef.current.files[0] || '';
-    console.log('file------', file);
     if (!file) return;
     const src: string = getImgUrl(file);
     handleSelectedImg(file, src);
-    searchImg({
-      file,
-      reset: true,
-      scrollPage: null,
-      isSelected: true,
-    });
+    searchImg(file, true, null);
     e.target.value = '';
   };
 
@@ -65,12 +51,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     }
     const src = getImgUrl(files[0]);
     handleSelectedImg(files[0], src);
-    searchImg({
-      file: files[0],
-      reset: true,
-      scrollPage: null,
-      isSelected: true,
-    });
+    searchImg(files[0], true, null);
   };
 
   const handlerDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -132,12 +113,12 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     );
   };
 
-  const generateSelectedHeader = () => {
+  const generateSelectedHeader = selectedImg => {
     return (
       <section className={classes.selectedHeader}>
         <div className={classes.cropperWrapper}>
           <Cropper
-            src={selectedImg}
+            src={selectedImg.src}
             propSend={searchImg}
             className={classes.cropImgWrapper}
             imgClassName={classes.cropImg}
@@ -160,26 +141,20 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
               </Typography>
             </div>
             <div className={classes.iconsWrapper}>
-              <Link
-                href="https://github.com/milvus-io/milvus"
-                children={
-                  <img
-                    src={'/images/reverse-image-search/github.svg'}
-                    alt="github"
-                  />
-                }
-              />
+              <Link href="https://github.com/milvus-io/milvus">
+                <img
+                  src={'/images/reverse-image-search/github.svg'}
+                  alt="github"
+                />
+              </Link>
 
               {!isMobile && (
-                <Link
-                  href="https://github.com/milvus-io/milvus"
-                  children={
-                    <img
-                      src={'/images/reverse-image-search/email.svg'}
-                      alt="email"
-                    />
-                  }
-                />
+                <Link href="https://github.com/milvus-io/milvus">
+                  <img
+                    src={'/images/reverse-image-search/email.svg'}
+                    alt="email"
+                  />
+                </Link>
               )}
             </div>
           </div>
@@ -190,7 +165,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
 
   return (
     <section>
-      {!selectedImg ? (
+      {!selectedImg.isSelected ? (
         <FileDrop
           onDragOver={handlerDragEnter}
           onDragLeave={handleDragLeave}
@@ -207,7 +182,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
           </div>
         </FileDrop>
       ) : (
-        generateSelectedHeader()
+        generateSelectedHeader(selectedImg)
       )}
     </section>
   );

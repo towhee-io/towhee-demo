@@ -14,13 +14,11 @@ import {
   formatCount,
   formatImgData,
   getImgUrl,
-  dataURLtoFile,
 } from '../../utils/helper';
 import Masonry from '../../components/imageSearchComponents/Masonry';
-import { search, getCount } from '../../utils/http';
+import { search, getCount, getModelOptions } from '../../utils/http';
 import UploaderHeader from '../../components/imageSearchComponents/Uploader';
 import { useCheckIsMobile } from '../../hooks/Style';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 // import { imageSearchDemo } from '../../../seo/page-description';
 import 'gestalt/dist/gestalt.css';
@@ -38,39 +36,34 @@ const Home = () => {
   const [selected, setSelected] = useState({
     src: '',
     isSelected: false,
+    ratio: 0,
   });
   const [count, setCount] = useState('');
   const [duration, setDuration] = useState<number | string>(0);
   const [file, setFile] = useState<any>(null!);
   const [isShowCode, setIsShowCode] = useState(false);
   const [noData, setNoData] = useState(false);
-  const { open } = dialog;
   const scrollContainer = useRef(null);
   const isMobile = useCheckIsMobile();
-  const [isNeedLoadMore, setIsNeedLoadMore] = useState(false);
 
-  const handleSelectedImg = (file: File | Blob) => {
+  const [modelOptions, setModelOptions] = useState<string[]>([]);
+  const [model, setModel] = useState<string>('');
+
+  const handleSelectedImg = (file: File | Blob, ratio) => {
     setFile(file);
     const src = getImgUrl(file);
     setSelected({
       src,
       isSelected: true,
+      ratio: ratio,
     });
   };
 
-  const handleImgSearch = async <
-    T extends {
-      file: File | Blob;
-      reset: boolean;
-      scrollPage: number | null;
-      isSelected: boolean;
-    }
-  >({
-    file,
-    reset,
-    scrollPage,
-    isSelected,
-  }: any) => {
+  const handleImgSearch = async (
+    file: File | Blob,
+    reset = false,
+    scrollPage: number | null
+  ) => {
     setLoading(true);
     setDuration('searching...');
     let tempPage = page;
@@ -80,13 +73,10 @@ const Home = () => {
       tempPage = 1;
       setNoData(false);
     }
-    if (isSelected) {
-      handleSelectedImg(file);
-    }
     const fd = new FormData();
     fd.append('image', file);
     const params = {
-      table_name: 'resnet101',
+      table_name: model || 'efficientnetb5',
       device: `${isMobile ? 'mobile' : 'pc'}` as DeviceType,
       page: scrollPage || tempPage,
       num: window.innerWidth < 800 ? 16 : 50,
@@ -94,7 +84,7 @@ const Home = () => {
 
     try {
       const [duration = 0, res] = await search(fd, params);
-      setDuration(Number.prototype.toFixed.call(duration, 4));
+      setDuration(Number(String(duration).substring(0, 6)));
       if (!res.length) {
         setNoData(true);
         return;
@@ -103,6 +93,7 @@ const Home = () => {
       formatImgData(res, setImgs);
     } catch (error) {
       console.log(error);
+      setNoData(true);
     } finally {
       setPage(v => v + 1);
       setLoading(false);
@@ -117,18 +108,7 @@ const Home = () => {
       const base64 = getBase64Image(image);
       const imgBlob = convertBase64UrlToBlob(base64);
 
-      const file = new File([base64.dataURL], 'blob', {
-        type: 'image/jpeg',
-      });
-
-      console.log('copyfile----', file);
-
-      handleImgSearch({
-        file: base64.dataURL,
-        reset,
-        scrollPage: null,
-        isSelected: false,
-      });
+      handleImgSearch(imgBlob, reset, null);
       setFile(imgBlob);
     };
   };
@@ -138,12 +118,7 @@ const Home = () => {
     async () => {
       try {
         setPartialLoading(true);
-        await handleImgSearch({
-          file,
-          reset: false,
-          scrollPage: page,
-          isSelected: false,
-        });
+        await handleImgSearch(file, false, page);
       } catch (error) {
         console.log(error);
       } finally {
@@ -161,26 +136,48 @@ const Home = () => {
 
   // reduce unnecessary rerendering
   const handleSearch = useCallback(
-    src => {
-      console.log(src);
+    (src, ratio) => {
       handleImgToBlob(src, true);
       setSelected({
         src: src,
         isSelected: true,
+        ratio,
       });
     },
     // eslint-disable-next-line
     []
   );
 
+  const handleModelChange = useCallback(
+    value => {
+      setModel(value);
+      console.log('selected.isSelected--', selected.isSelected);
+      if (selected.isSelected) {
+        handleImgToBlob(selected.src, true);
+      }
+    },
+    [selected]
+  );
+
   const getImgsCount = async () => {
-    const count = await getCount('resnet101');
-    setCount(formatCount(count));
+    try {
+      const { model_list: options = [] } = await getModelOptions();
+      setModelOptions(options);
+      setModel(options[0]);
+      const count = await getCount(options[0]);
+      setCount(formatCount(count));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchData = async () => {
+    await getImgsCount();
+    handleImgToBlob('/images/demo.jpg');
   };
 
   useEffect(() => {
-    handleImgToBlob('/images/demo.jpg');
-    getImgsCount();
+    fetchData();
   }, []);
 
   return (
@@ -220,15 +217,20 @@ const Home = () => {
               searchImg={handleImgSearch}
               handleSelectedImg={handleSelectedImg}
               toggleIsShowCode={toggleIsShowCode}
-              selectedImg={selected.src}
+              selectedImg={selected}
               count={count}
               duration={duration}
+              modelOptions={modelOptions}
+              model={model}
+              setModel={handleModelChange}
             />
           </div>
 
           {noData ? (
             <div className="no-data">
-              <p style={{ textAlign: 'center' }}>No More Data.</p>
+              <p style={{ textAlign: 'center', marginTop: '120px' }}>
+                No More Data.
+              </p>
             </div>
           ) : (
             <Masonry
@@ -239,6 +241,7 @@ const Home = () => {
               isShowCode={isShowCode}
               handleSearch={handleSearch}
               container={scrollContainer}
+              model={model}
             />
           )}
         </div>

@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import React, { FC, ReactElement } from 'react';
-import CustomContainer from '../layout/Container';
 import { getCTAButtonStyle } from './ctaButton.util';
+import Image from 'next/image';
 
 type VariantType =
   | 'contained'
@@ -104,7 +104,7 @@ const CTAButton: FC<ICtaButtonProps> = props => {
   const IconBtn = (
     <div className={classes.icon}>
       <span className={`${classes.content} ${classes.iconContent}`}>
-        <img className={classes.iconImg} src={vectorPath} alt="vector icon" />
+        <Image className={classes.iconImg} src={vectorPath} alt="vector icon" />
       </span>
     </div>
   );
@@ -147,7 +147,11 @@ const CTAButton: FC<ICtaButtonProps> = props => {
   return linkHref ? (
     btnMap[variant]
   ) : (
-    <button onClick={handleClick} className={`${classes.btn} ${className}`} {...others}>
+    <button
+      onClick={handleClick}
+      className={`${classes.btn} ${className}`}
+      {...others}
+    >
       {btnMap[variant]}
     </button>
   );

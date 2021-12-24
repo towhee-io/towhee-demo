@@ -115,8 +115,9 @@ type MainPropsType = {
   loading: boolean;
   isSelected: boolean;
   isShowCode: boolean;
-  handleSearch: (param: string) => void;
+  handleSearch: (param: string, ratio: number) => void;
   container: any;
+  model: string;
 };
 const Main: React.FC<MainPropsType> = ({
   pins,
@@ -126,6 +127,7 @@ const Main: React.FC<MainPropsType> = ({
   isShowCode,
   handleSearch,
   container,
+  model,
 }) => {
   const classes = useStyles();
   const isMobile = useCheckIsMobile();
@@ -152,6 +154,7 @@ const Main: React.FC<MainPropsType> = ({
                   data={data}
                   isSelected={isSelected}
                   handleSearch={handleSearch}
+                  model={model}
                 />
               )}
               items={pins}

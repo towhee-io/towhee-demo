@@ -67,20 +67,18 @@ export const formatCount = (count: number) => {
 };
 
 export const formatImgData = async (
-  list: ImageSearchDemoListType,
+  list: [string, string, number][],
   setFunc: React.Dispatch<React.SetStateAction<any[]>>
 ) => {
   const results = list.map(item => {
-    const distance = item[1] ? item[1].toFixed(6) : 0;
-    const src = item[0][0];
-    const origin_src = src.replace(/pc_suo_|mobile_suo_/g, '');
-    const [width, height] = item[0][1].split('X');
+    const [src, size, distance] = item;
+    const [width, height] = size.split('x');
+
     return {
-      distance,
-      src,
+      distance: distance ? distance.toFixed(6) : 0,
+      src: src,
       width: Number(width),
       height: Number(height),
-      origin_src,
     };
   });
   setFunc(v => [...v, ...results]);
