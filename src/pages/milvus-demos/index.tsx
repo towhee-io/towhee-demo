@@ -23,7 +23,7 @@ import Head from 'next/head';
 // import { imageSearchDemo } from '../../../seo/page-description';
 import 'gestalt/dist/gestalt.css';
 import { DeviceType } from '../../types';
-import { useStyles } from './style';
+import { useStyles } from '../../styles/demo';
 
 const Home = () => {
   formatCount(134200);
@@ -36,7 +36,6 @@ const Home = () => {
   const [selected, setSelected] = useState({
     src: '',
     isSelected: false,
-    ratio: 0,
   });
   const [count, setCount] = useState('');
   const [duration, setDuration] = useState<number | string>(0);
@@ -49,13 +48,12 @@ const Home = () => {
   const [modelOptions, setModelOptions] = useState<string[]>([]);
   const [model, setModel] = useState<string>('');
 
-  const handleSelectedImg = (file: File | Blob, ratio) => {
+  const handleSelectedImg = (file: File | Blob) => {
     setFile(file);
     const src = getImgUrl(file);
     setSelected({
       src,
       isSelected: true,
-      ratio: ratio,
     });
   };
 
@@ -136,12 +134,11 @@ const Home = () => {
 
   // reduce unnecessary rerendering
   const handleSearch = useCallback(
-    (src, ratio) => {
+    src => {
       handleImgToBlob(src, true);
       setSelected({
         src: src,
         isSelected: true,
-        ratio,
       });
     },
     // eslint-disable-next-line
@@ -151,7 +148,6 @@ const Home = () => {
   const handleModelChange = useCallback(
     value => {
       setModel(value);
-      console.log('selected.isSelected--', selected.isSelected);
       if (selected.isSelected) {
         handleImgToBlob(selected.src, true);
       }
@@ -171,13 +167,11 @@ const Home = () => {
     }
   };
 
-  const fetchData = async () => {
-    await getImgsCount();
-    handleImgToBlob('/images/demo.jpg');
-  };
-
   useEffect(() => {
-    fetchData();
+    (async () => {
+      await getImgsCount();
+      handleImgToBlob('/images/demo.jpg');
+    })();
   }, []);
 
   return (
@@ -200,19 +194,14 @@ const Home = () => {
               href="/milvus-demos"
               className={classes.backLink}
               underline="none"
-              children={
-                <>
-                  <ChevronLeftIcon />
-                  <Typography
-                    variant="h4"
-                    className="back-btn"
-                    component="span"
-                  >
-                    Back to Demo
-                  </Typography>
-                </>
-              }
-            />
+            >
+              <>
+                <ChevronLeftIcon />
+                <Typography variant="h4" className="back-btn" component="span">
+                  Back to Demo
+                </Typography>
+              </>
+            </Link>
             <UploaderHeader
               searchImg={handleImgSearch}
               handleSelectedImg={handleSelectedImg}

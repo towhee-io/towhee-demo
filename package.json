@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "lint": "next lint"
   },
@@ -18,6 +18,7 @@
     "cropperjs": "^1.5.12",
     "gestalt": "^41.0.6",
     "next": "12.0.7",
+    "next-images": "^1.8.4",
     "qs": "^6.10.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",

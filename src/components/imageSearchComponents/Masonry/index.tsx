@@ -115,7 +115,7 @@ type MainPropsType = {
   loading: boolean;
   isSelected: boolean;
   isShowCode: boolean;
-  handleSearch: (param: string, ratio: number) => void;
+  handleSearch: (param: string) => void;
   container: any;
   model: string;
 };

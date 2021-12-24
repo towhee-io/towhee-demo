@@ -10,6 +10,7 @@ import { TransitionProps } from '@material-ui/core/transitions/transition';
 const Alert = React.forwardRef((props: { [x: string]: any }, ref) => {
   return <MuiAlert ref={ref} elevation={6} variant="filled" {...props} />;
 });
+Alert.displayName = 'Alert';
 
 function SlideTransition(props: TransitionProps) {
   return <Slide {...props} direction="left" />;
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CustomSnackBar: FC<CustomSnackBarType> = (props) => {
+const CustomSnackBar: FC<CustomSnackBarType> = props => {
   const {
     vertical,
     horizontal,
@@ -76,5 +77,7 @@ const CustomSnackBar: FC<CustomSnackBarType> = (props) => {
     </Snackbar>
   );
 };
+
+CustomSnackBar.displayName = 'CustomSnackBar';
 
 export default CustomSnackBar;

@@ -4,6 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { rootContext } from '../../../context/Root';
 import PreviewItem from './PreviewItem';
+import NextImage from 'next/image';
 
 const useStyles = makeStyles((theme: Theme) => ({
   imgWrapper: {
@@ -112,7 +113,7 @@ type ItemPropsType = {
     distance: number;
   };
   isSelected: boolean;
-  handleSearch: (param: string, ratio: number) => void;
+  handleSearch: (param: string) => void;
   model: string;
 };
 const Item: React.FC<ItemPropsType> = props => {
@@ -120,8 +121,6 @@ const Item: React.FC<ItemPropsType> = props => {
     data: { height, width, src, distance },
     model,
   } = props;
-
-  const ratio = width / height;
   const image_path = src.replace(/(pc|mobile)\?/, `raw?table_name=${model}`);
 
   const { setPreviewDialog, handleClosePreviewDialog } =
@@ -135,7 +134,6 @@ const Item: React.FC<ItemPropsType> = props => {
         <PreviewItem
           src={image_path}
           distance={distance}
-          ratio={width / height}
           handleSearch={props.handleSearch}
         />
       ),
@@ -145,8 +143,7 @@ const Item: React.FC<ItemPropsType> = props => {
 
   const searchThisPic = (e: React.MouseEvent<HTMLSpanElement>, src: string) => {
     e.stopPropagation();
-    console.log('image_path=--', image_path);
-    props.handleSearch(image_path, ratio);
+    props.handleSearch(image_path);
   };
 
   return (
@@ -176,7 +173,7 @@ const Item: React.FC<ItemPropsType> = props => {
           className={classes.iconWrapper}
           onClick={e => searchThisPic(e, src)}
         >
-          <img
+          <NextImage
             className="img"
             src={'/images/reverse-image-search/search-black.svg'}
             alt="search"

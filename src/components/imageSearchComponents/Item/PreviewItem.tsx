@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core';
 import { rootContext } from '../../../context/Root';
 import { useCheckIsMobile } from '../../../hooks/Style';
 import CloseIcon from '@material-ui/icons/Close';
+import Image from 'next/image';
 
 const useStyles = makeStyles((theme: Theme) => ({
   previewContainer: {
@@ -116,15 +117,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 type PreviewItemPropsType = {
   src: string;
   distance: number;
-  handleSearch: (param: string, ratio: number) => void;
-  ratio: number;
+  handleSearch: (param: string) => void;
 };
 
 const PreviewItem: React.FC<PreviewItemPropsType> = ({
   src,
   distance,
   handleSearch,
-  ratio,
 }) => {
   const { handleClosePreviewDialog } = useContext(rootContext);
   const isMobile = useCheckIsMobile();
@@ -132,7 +131,7 @@ const PreviewItem: React.FC<PreviewItemPropsType> = ({
   const [loading, setLoding] = useState(true);
 
   const handleClickSearch = () => {
-    handleSearch(src, ratio);
+    handleSearch(src);
     handleClosePreviewDialog();
   };
 
@@ -158,7 +157,7 @@ const PreviewItem: React.FC<PreviewItemPropsType> = ({
             </span>
           </p>
           <div className={classes.imgContent}>
-            <img src={src} alt="test" className="img" />
+            <Image src={src} alt="test" className="img" />
           </div>
           <div className={classes.desc}>
             <div className="distance">
@@ -172,7 +171,7 @@ const PreviewItem: React.FC<PreviewItemPropsType> = ({
 
             <div className="searc-btn" onClick={handleClickSearch}>
               <span className="icon-wrapper">
-                <img
+                <Image
                   src={'/images/reverse-image-search/search-white.svg'}
                   alt="search-icon"
                 />
