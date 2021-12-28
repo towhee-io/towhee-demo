@@ -9,6 +9,7 @@ const Layout: React.FC<any> = props => {
         height: '100%',
       }}
     >
+      <Header />
       {props.children}
     </section>
   );

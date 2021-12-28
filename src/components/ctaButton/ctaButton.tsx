@@ -1,7 +1,6 @@
 import { Typography } from '@material-ui/core';
 import React, { FC, ReactElement } from 'react';
 import { getCTAButtonStyle } from './ctaButton.util';
-import Image from 'next/image';
 
 type VariantType =
   | 'contained'
@@ -104,7 +103,7 @@ const CTAButton: FC<ICtaButtonProps> = props => {
   const IconBtn = (
     <div className={classes.icon}>
       <span className={`${classes.content} ${classes.iconContent}`}>
-        <Image className={classes.iconImg} src={vectorPath} alt="vector icon" />
+        <img className={classes.iconImg} src={vectorPath} alt="vector icon" />
       </span>
     </div>
   );

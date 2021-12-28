@@ -14,7 +14,6 @@ import Cropper from '../Cropper';
 import { useCheckIsMobile } from '../../../hooks/Style';
 import { useStyles } from './style';
 import { UploaderHeaderType } from '../../../types';
-import Image from 'next/image';
 
 const UploaderHeader: React.FC<UploaderHeaderType> = ({
   searchImg,
@@ -37,7 +36,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     if (!file) return;
     const src: string = getImgUrl(file);
     handleSelectedImg(file, src);
-    searchImg(file, true, null);
+    searchImg(file, model, true, null);
     e.target.value = '';
   };
 
@@ -52,7 +51,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     }
     const src = getImgUrl(files[0]);
     handleSelectedImg(files[0], src);
-    searchImg(files[0], true, null);
+    searchImg(files[0], model, true, null);
   };
 
   const handlerDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -143,7 +142,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
             </div>
             <div className={classes.iconsWrapper}>
               <Link href="https://github.com/milvus-io/milvus">
-                <Image
+                <img
                   src={'/images/reverse-image-search/github.svg'}
                   alt="github"
                 />
@@ -151,7 +150,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
 
               {!isMobile && (
                 <Link href="https://github.com/milvus-io/milvus">
-                  <Image
+                  <img
                     src={'/images/reverse-image-search/email.svg'}
                     alt="email"
                   />

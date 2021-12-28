@@ -37,6 +37,24 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           /> */}
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-0JXY6PQLWQ"
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                process.env.NODE_ENV === 'production'
+                  ? `
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+                      
+                        gtag('config', 'G-0JXY6PQLWQ');
+                        `
+                  : `javascript:void(0)`,
+            }}
+          />
           {generatePreloadLink()}
         </Head>
         <body>
