@@ -4,7 +4,6 @@ import { Typography } from '@material-ui/core';
 import { rootContext } from '../../../context/Root';
 import { useCheckIsMobile } from '../../../hooks/Style';
 import CloseIcon from '@material-ui/icons/Close';
-import Image from 'next/image';
 
 const useStyles = makeStyles((theme: Theme) => ({
   previewContainer: {
@@ -157,7 +156,7 @@ const PreviewItem: React.FC<PreviewItemPropsType> = ({
             </span>
           </p>
           <div className={classes.imgContent}>
-            <Image src={src} alt="test" className="img" />
+            <img src={src} alt="test" className="img" />
           </div>
           <div className={classes.desc}>
             <div className="distance">
@@ -171,7 +170,7 @@ const PreviewItem: React.FC<PreviewItemPropsType> = ({
 
             <div className="searc-btn" onClick={handleClickSearch}>
               <span className="icon-wrapper">
-                <Image
+                <img
                   src={'/images/reverse-image-search/search-white.svg'}
                   alt="search-icon"
                 />

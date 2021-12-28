@@ -4,7 +4,6 @@ import { makeStyles, Theme } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import { rootContext } from '../../../context/Root';
 import PreviewItem from './PreviewItem';
-import NextImage from 'next/image';
 
 const useStyles = makeStyles((theme: Theme) => ({
   imgWrapper: {
@@ -173,7 +172,7 @@ const Item: React.FC<ItemPropsType> = props => {
           className={classes.iconWrapper}
           onClick={e => searchThisPic(e, src)}
         >
-          <NextImage
+          <img
             className="img"
             src={'/images/reverse-image-search/search-black.svg'}
             alt="search"

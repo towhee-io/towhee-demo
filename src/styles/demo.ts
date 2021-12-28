@@ -3,9 +3,8 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
-    height: 'calc(100vh - 80px)',
+    height: 'calc(100vh - 86px)',
     overflow: 'auto',
-    marginTop: '80px',
   },
 
   backLink: {
@@ -31,7 +30,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     maxWidth: '1440px',
     width: '100%',
-    padding: theme.spacing(3, 12.5, 0),
+    padding: theme.spacing(5, 12.5, 0),
     margin: '0 auto',
     boxSizing: 'border-box',
 

@@ -1,18 +1,18 @@
 export const NAV_LIST = [
   {
     label: 'Pipelines',
-    href: '',
+    href: 'https://towhee.io/pipelines',
   },
   {
     label: 'Operators',
-    href: '',
+    href: 'https://towhee.io/operators',
   },
   {
     label: 'Documentation',
-    href: '',
+    href: 'https://docs.towhee.io/',
   },
   {
     label: 'Demo',
-    href: '',
+    href: '/',
   },
 ];
