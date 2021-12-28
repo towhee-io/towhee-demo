@@ -123,6 +123,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
             className={classes.cropImgWrapper}
             imgClassName={classes.cropImg}
             viewMode={3}
+            model={model}
           ></Cropper>
         </div>
 

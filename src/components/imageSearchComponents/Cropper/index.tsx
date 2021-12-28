@@ -40,7 +40,7 @@ const CroppeDemo = props => {
   const classes = useStyles();
   const imgRef = useRef(null);
   const myCropper = useRef(null);
-  const { propSend, src, className, imgClassName } = props;
+  const { propSend, src, className, imgClassName, model } = props;
 
   const handleImgLoaded = () => {
     let latestSrc = null;
@@ -75,7 +75,7 @@ const CroppeDemo = props => {
     }
     cropperInstance.getCroppedCanvas().toBlob(
       blob => {
-        propSend(blob, true, null);
+        propSend(blob, model, true, null);
       } /*, 'image/png' */
     );
   };
