@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useMemo, useState } from 'react';
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { withWidth } from '@material-ui/core';
+import { useCheckIsMobile } from '../../../hooks/Style';
 
 const useStyles = makeStyles((theme: Theme) => ({
   cropper: () => ({
@@ -18,8 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 
     [theme.breakpoints.down('sm')]: {
-      width: 'auto',
-      height: '306px',
+      width: '306px',
     },
 
     '& .cropper-line': {
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 let timer: ReturnType<typeof setTimeout> = null;
 const CroppeDemo = props => {
-  const { propSend, src, className, imgClassName, model } = props;
+  const { propSend, src, className, imgClassName, model, setFile } = props;
 
   const classes = useStyles();
   const imgRef = useRef(null);
@@ -52,6 +51,7 @@ const CroppeDemo = props => {
     width: 0,
     height: 0,
   });
+  const isMobile = useCheckIsMobile();
 
   const handleImgLoaded = () => {
     let latestSrc = null;
@@ -59,7 +59,7 @@ const CroppeDemo = props => {
     const height = imgRef.current.height;
     setRatio({
       width: width,
-      height: (247 / width) * height,
+      height: isMobile ? (306 / width) * height : (247 / width) * height,
     });
     const cropper = new Cropper(imgRef.current, {
       viewMode: 3,
@@ -94,6 +94,7 @@ const CroppeDemo = props => {
     cropperInstance.getCroppedCanvas().toBlob(
       blob => {
         propSend(blob, model, true, null);
+        setFile(blob);
       } /*, 'image/png' */
     );
   };

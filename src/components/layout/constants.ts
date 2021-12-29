@@ -11,8 +11,4 @@ export const NAV_LIST = [
     label: 'Documentation',
     href: 'https://docs.towhee.io/',
   },
-  {
-    label: 'Demo',
-    href: '/',
-  },
 ];
