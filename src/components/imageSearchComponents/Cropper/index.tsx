@@ -1,18 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { withWidth } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  cropper: {
+  cropper: () => ({
     width: '247px',
-    height: '232px',
+    height: 'auto',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
 
-    [theme.breakpoints.down('sm')]: {
+    '&>img': {
       width: '100%',
+      height: '100%',
+    },
+
+    [theme.breakpoints.down('sm')]: {
+      width: 'auto',
       height: '306px',
     },
 
@@ -32,21 +38,33 @@ const useStyles = makeStyles((theme: Theme) => ({
       zIndex: -1,
       background: 'none',
     },
-  },
+  }),
 }));
 
 let timer: ReturnType<typeof setTimeout> = null;
 const CroppeDemo = props => {
+  const { propSend, src, className, imgClassName, model } = props;
+
   const classes = useStyles();
   const imgRef = useRef(null);
   const myCropper = useRef(null);
-  const { propSend, src, className, imgClassName, model } = props;
+  const [ratio, setRatio] = useState({
+    width: 0,
+    height: 0,
+  });
 
   const handleImgLoaded = () => {
     let latestSrc = null;
+    const width = imgRef.current.width;
+    const height = imgRef.current.height;
+    setRatio({
+      width: width,
+      height: (247 / width) * height,
+    });
     const cropper = new Cropper(imgRef.current, {
       viewMode: 3,
       autoCropArea: 0.98,
+      aspectRatio: width / height,
       crop() {
         if (timer) {
           clearTimeout(timer);
@@ -82,7 +100,10 @@ const CroppeDemo = props => {
 
   return (
     <div className={classes.cropper}>
-      <div className={className}>
+      <div
+        className={className}
+        style={{ width: `${ratio.width}px`, height: `${ratio.height}px` }}
+      >
         {src && (
           <img
             ref={imgRef}
