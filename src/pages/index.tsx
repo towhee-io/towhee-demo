@@ -134,6 +134,8 @@ const Home = () => {
   // reduce unnecessary rerendering
   const handleSearch = useCallback(
     src => {
+      setNoData(true);
+      setLoading(true);
       searchImgByBlob(src, model);
       setSelected({
         src: src,
@@ -160,6 +162,7 @@ const Home = () => {
       setModel(options[0]);
       const count = await getCount(options[0]);
       setCount(formatCount(count));
+      return options[0];
     } catch (error) {
       console.log(error);
     }
@@ -167,7 +170,7 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      await getImgsCount();
+      const model = await getImgsCount();
       searchImgByBlob('/images/demo.jpg', model);
     })();
   }, []);

@@ -64,6 +64,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(2),
     width: '279px',
     maxWidth: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(1),
@@ -88,23 +91,33 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   cropImgWrapper: {
     width: '247px',
-    height: '232px',
+    height: 'auto',
 
-    '& img': {
+    '&>img': {
       width: '100%',
-      // height: (prop: any) => `${247 / prop.selectedImg.ratio}px`,
       height: '100%',
     },
 
     [theme.breakpoints.down('sm')]: {
-      width: '100%',
+      width: 'auto',
       height: '306px',
-
-      '& img': {
-        maxWidth: '100%',
-        maxHeight: '306px',
-      },
     },
+
+    // '& img': {
+    //   width: '100%',
+    //   // height: (prop: any) => `${247 / prop.selectedImg.ratio}px`,
+    //   height: '100%',
+    // },
+
+    // [theme.breakpoints.down('sm')]: {
+    //   width: '100%',
+    //   height: '306px',
+
+    //   '& img': {
+    //     maxWidth: '100%',
+    //     maxHeight: '306px',
+    //   },
+    // },
   },
   cropImg: {
     display: 'none',
