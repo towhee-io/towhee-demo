@@ -120,6 +120,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
           <Cropper
             src={selectedImg.src}
             propSend={searchImg}
+            setFile={handleSelectedImg}
             className={classes.cropImgWrapper}
             imgClassName={classes.cropImg}
             viewMode={3}
