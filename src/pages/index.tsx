@@ -37,7 +37,7 @@ const Home = () => {
     isSelected: false,
   });
   const [count, setCount] = useState('');
-  const [duration, setDuration] = useState<number | string>(0);
+  const [duration, setDuration] = useState<number | string>('searching...');
   const [file, setFile] = useState<any>(null!);
   const [isShowCode, setIsShowCode] = useState(false);
   const [noData, setNoData] = useState(false);
@@ -77,12 +77,13 @@ const Home = () => {
       table_name: model || 'efficientnetb5',
       device: `${isMobile ? 'mobile' : 'pc'}` as DeviceType,
       page: pageIndex || tempPage,
-      num: window.innerWidth < 800 ? 16 : 50,
+      num: window.innerWidth < 800 ? 32 : 50,
     };
 
     try {
       const [duration = 0, res] = await search(fd, params);
-      setDuration(Number(String(duration).substring(0, 5)));
+
+      setDuration(Math.round(duration * 1000));
       if (!res.length) {
         setNoData(true);
         return;
@@ -99,6 +100,7 @@ const Home = () => {
   };
 
   const searchImgByBlob = (src: string, model: string) => {
+    console.log('model---', model);
     const image = document.createElement('img');
     image.crossOrigin = '';
     image.src = src;
@@ -143,7 +145,7 @@ const Home = () => {
       });
     },
     // eslint-disable-next-line
-    []
+    [model]
   );
 
   const handleModelChange = value => {
@@ -169,6 +171,10 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setSelected({
+      src: '/images/demo.jpg',
+      isSelected: true,
+    });
     (async () => {
       const model = await getImgsCount();
       searchImgByBlob('/images/demo.jpg', model);

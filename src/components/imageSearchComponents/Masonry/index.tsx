@@ -82,7 +82,8 @@ const useStyles = makeStyles((theme: Theme) => ({
       },
 
       '&::after': {
-        content: '"how picture sorted by"',
+        content:
+          '"The results are sorted by normalized L2 distance, range from 0 to 2, smaller is better."',
         background: '#232F34',
         borderRadius: '4px',
         padding: '5px 10px',
@@ -92,9 +93,12 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: 'absolute',
         visibility: 'hidden',
         opacity: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        top: '40px',
+        // left: '50%',
+        // transform: 'translateX(-50%)',
+        // top: '32px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        left: '32px',
         whiteSpace: 'nowrap',
 
         [theme.breakpoints.down('sm')]: {
@@ -148,7 +152,7 @@ const Main: React.FC<MainPropsType> = ({
           {pins.length ? (
             <Masonry
               columnWidth={isMobile ? 154 : 290}
-              virtualize={true}
+              virtualize={false}
               comp={({ data }) => (
                 <Item
                   data={data}

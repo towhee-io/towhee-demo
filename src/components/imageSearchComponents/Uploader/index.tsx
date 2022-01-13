@@ -14,6 +14,7 @@ import Cropper from '../Cropper';
 import { useCheckIsMobile } from '../../../hooks/Style';
 import { useStyles } from './style';
 import { UploaderHeaderType } from '../../../types';
+import { StylesContext } from '@material-ui/styles';
 
 const UploaderHeader: React.FC<UploaderHeaderType> = ({
   searchImg,
@@ -35,6 +36,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     const file = inputRef.current.files[0] || '';
     if (!file) return;
     const src: string = getImgUrl(file);
+
     handleSelectedImg(file, src);
     searchImg(file, model, true, null);
     e.target.value = '';
@@ -67,6 +69,30 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     const { value } = e.target;
     setModel(value);
   };
+
+  const generateDrainageContent = () => (
+    <div className={classes.drainageContent}>
+      <Typography variant="body1" component="p" className={classes.text}>
+        Want to learn the techniques behind the scene see the{' '}
+        <Link href="https://docs.towhee.io/tutorials/reverse-image-search">
+          tutorial
+        </Link>
+        .
+      </Typography>
+
+      <div>
+        <Typography variant="body1" component="p" className={classes.text}>
+          demo resource:
+        </Typography>
+        <Typography variant="body1" component="p" className={classes.text}>
+          source code: <Link>https://github.com/towhee-io/towhee</Link>.
+        </Typography>
+        <Typography variant="body1" component="p" className={classes.text}>
+          docker image:
+        </Typography>
+      </div>
+    </div>
+  );
 
   const generateFileUploader = () => {
     return (
@@ -113,9 +139,12 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     );
   };
 
-  const generateSelectedHeader = selectedImg => {
+  const generateSelectedHeader = (selectedImg: {
+    src: string;
+    isSelected: boolean;
+  }) => {
     return (
-      <section className={classes.selectedHeader}>
+      <div className={classes.selectedHeader}>
         <div className={classes.cropperWrapper}>
           <Cropper
             src={selectedImg.src}
@@ -137,9 +166,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
               </Typography>
               <Typography variant="h4" className="text" component="p">
                 Duration:{' '}
-                {!!Number(duration)
-                  ? `${(duration as number) * 1000} ms`
-                  : duration}
+                {!!Number(duration) ? `${duration as number} ms` : duration}
               </Typography>
             </div>
             <div className={classes.iconsWrapper}>
@@ -161,13 +188,13 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
             </div>
           </div>
         </div>
-      </section>
+      </div>
     );
   };
 
   return (
-    <section>
-      {!selectedImg.isSelected ? (
+    <section className={classes.uploadSectionWrapper}>
+      {/* {!selectedImg.isSelected ? (
         <FileDrop
           onDragOver={handlerDragEnter}
           onDragLeave={handleDragLeave}
@@ -185,7 +212,10 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
         </FileDrop>
       ) : (
         generateSelectedHeader(selectedImg)
-      )}
+      )} */}
+
+      {generateSelectedHeader(selectedImg)}
+      {generateDrainageContent()}
     </section>
   );
 };

@@ -63,7 +63,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     boxSizing: 'border-box',
     padding: theme.spacing(2),
     width: '279px',
-    maxWidth: '50%',
+    maxWidth: '60%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -167,5 +167,35 @@ export const useStyles = makeStyles((theme: Theme) => ({
     width: '155px',
     maxWidth: '100%',
     marginBottom: theme.spacing(2),
+  },
+
+  uploadSectionWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+
+    [theme.breakpoints.down(theme.breakpoints.values.md)]: {
+      flexDirection: 'column',
+    },
+  },
+
+  drainageContent: {
+    margin: '32px 0',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    maxWidth: '35%',
+    [theme.breakpoints.down(theme.breakpoints.values.md)]: {
+      maxWidth: '100%',
+    },
+  },
+
+  text: {
+    fontSize: '16px',
+    lineHeight: '26px',
+
+    [theme.breakpoints.down(theme.breakpoints.values.md)]: {
+      fontSize: '14px',
+      lineHeight: '22px',
+    },
   },
 }));
