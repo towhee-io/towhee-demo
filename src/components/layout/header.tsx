@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       padding: theme.spacing(1, 2),
     },
 
-    '&>li:not(:last-child)': {
+    '&>li': {
       marginRight: theme.spacing(2),
     },
   },
@@ -194,12 +194,16 @@ const Header: React.FC<any> = () => {
             </li>
             {NAV_LIST.map(v => (
               <li key={v.label}>
-                <Link href={v.href}>{v.label}</Link>
+                <Link href={v.href} target="_blank">
+                  {v.label}
+                </Link>
               </li>
             ))}
           </ul>
           <div className={classes.loginBtn} key="signIn">
-            <a href="">Sign In</a>
+            <a href="https://towhee.io/user/login" target="_blank">
+              Sign In
+            </a>
           </div>
           <div className={classes.menuWrapper} onClick={handleToggleMobileMenu}>
             <MenuIcon />
