@@ -147,12 +147,12 @@ const Home = () => {
     [model]
   );
 
-  const handleModelChange = value => {
+  const handleModelChange = (value: string) => {
     setModel(value);
     if (selected.src) {
       searchImgByBlob(selected.src, value);
     } else {
-      searchImgByBlob('/images/demo.jpg', value);
+      searchImgByBlob('/images/demo.jpeg', value);
     }
   };
 
@@ -171,12 +171,12 @@ const Home = () => {
 
   useEffect(() => {
     setSelected({
-      src: '/images/demo.jpg',
+      src: '/images/demo.jpeg',
       isSelected: true,
     });
     (async () => {
       const model = await getImgsCount();
-      searchImgByBlob('/images/demo.jpg', model);
+      searchImgByBlob('/images/demo.jpeg', model);
     })();
   }, []);
 

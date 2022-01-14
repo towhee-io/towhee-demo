@@ -49,28 +49,47 @@ const useStyles = makeStyles((theme: Theme) => ({
 let timer: ReturnType<typeof setTimeout> = null;
 
 const CroppeDemo = props => {
-  const { cropAndSearch, src, className, imgClassName, model } = props;
+  const { cropAndSearch, src, className, imgClassName, model = '' } = props;
   const classes = useStyles();
-  const cropperRef = useRef<HTMLImageElement>(null);
+  const cropperRef = useRef<any>(null);
+  const [cropData, setCropData] = useState({
+    x: 0,
+    y: 0,
+    width: '100%',
+    height: '100%',
+  });
 
-  const onCrop = () => {
-    console.log('model---', model);
-    // const imageElement: any = cropperRef?.current;
-    // if (!imageElement) {
-    //   return;
-    // }
-    // const cropper: any = imageElement?.cropper;
-    // if (timer) {
-    //   clearTimeout(timer);
-    // }
-    // timer = setTimeout(() => {
-    //   // cropper.getCroppedCanvas().toBlob(
-    //   //   blob => {
-    //   //     cropAndSearch(blob);
-    //   //   } /*, 'image/png' */
-    //   // );
-    // }, 1000);
+  let onCrop = () => {
+    const imageElement: any = cropperRef?.current;
+
+    const cropper: any = imageElement?.cropper;
+    const model: any = imageElement?.model;
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      if (!cropper?.getCroppedCanvas()) {
+        return;
+      }
+      cropper.getCroppedCanvas().toBlob(
+        blob => {
+          cropAndSearch(blob, model, true, null);
+        } /*, 'image/png' */
+      );
+    }, 1000);
   };
+
+  useEffect(() => {
+    cropperRef.current.model = model;
+
+    setCropData({
+      x: 0,
+      y: 0,
+      width: '100%',
+      height: '100%',
+    });
+  }, [model]);
 
   return (
     <div className={classes.cropper}>
@@ -78,10 +97,11 @@ const CroppeDemo = props => {
         src={src}
         style={{ height: 'auto', width: '100%' }}
         // Cropper.js options
-        initialAspectRatio={16 / 9}
-        autoCropArea={0.98}
+        autoCropArea={1}
+        autoCrop={true}
+        data={cropData}
         guides={true}
-        crop={() => onCrop()}
+        crop={onCrop}
         ref={cropperRef}
       />
     </div>

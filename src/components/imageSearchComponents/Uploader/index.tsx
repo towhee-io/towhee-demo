@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Button,
   Typography,
@@ -146,6 +146,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
       <div className={classes.selectedHeader}>
         <div className={classes.cropperWrapper}>
           <Cropper
+            key={model}
             src={selectedImg.src}
             cropAndSearch={searchImg}
             className={classes.cropImgWrapper}
