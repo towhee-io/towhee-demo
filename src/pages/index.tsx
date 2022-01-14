@@ -83,7 +83,7 @@ const Home = () => {
     try {
       const [duration = 0, res] = await search(fd, params);
 
-      setDuration(Math.round(duration * 1000));
+      setDuration(Math.round(duration * 100));
       if (!res.length) {
         setNoData(true);
         return;
@@ -100,7 +100,6 @@ const Home = () => {
   };
 
   const searchImgByBlob = (src: string, model: string) => {
-    console.log('model---', model);
     const image = document.createElement('img');
     image.crossOrigin = '';
     image.src = src;
