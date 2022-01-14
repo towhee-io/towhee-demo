@@ -24,6 +24,8 @@ export type RootContextType = {
   setIsShowMobileMask: React.Dispatch<React.SetStateAction<string>>;
   userId: string;
   trackingEvent: (event: TrackingEventType, params: TrackingParams) => void;
+  model: string;
+  setModel: (params: string) => void;
 };
 
 export type DialogType = {

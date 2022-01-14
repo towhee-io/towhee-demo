@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Button,
   Typography,
@@ -14,7 +14,6 @@ import Cropper from '../Cropper';
 import { useCheckIsMobile } from '../../../hooks/Style';
 import { useStyles } from './style';
 import { UploaderHeaderType } from '../../../types';
-import { StylesContext } from '@material-ui/styles';
 
 const UploaderHeader: React.FC<UploaderHeaderType> = ({
   searchImg,
@@ -147,12 +146,11 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
       <div className={classes.selectedHeader}>
         <div className={classes.cropperWrapper}>
           <Cropper
+            key={model}
             src={selectedImg.src}
-            propSend={searchImg}
-            setFile={handleSelectedImg}
+            cropAndSearch={searchImg}
             className={classes.cropImgWrapper}
             imgClassName={classes.cropImg}
-            viewMode={3}
             model={model}
           ></Cropper>
         </div>
@@ -166,7 +164,9 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
               </Typography>
               <Typography variant="h4" className="text" component="p">
                 Duration:{' '}
-                {!!Number(duration) ? `${duration as number} ms` : duration}
+                {!!Number(duration)
+                  ? `${(duration as number) / 100} s`
+                  : duration}
               </Typography>
             </div>
             <div className={classes.iconsWrapper}>

@@ -75,6 +75,8 @@ export const rootContext = React.createContext<RootContextType>({
   setIsShowMobileMask: (params: string) => {},
   userId: '',
   trackingEvent: (event: TrackingEventType, params: {}) => {},
+  model: '',
+  setModel: () => {},
 });
 
 const commonThemes = {
@@ -372,6 +374,8 @@ export const RootProvider = (props: { children: React.ReactNode }) => {
 
   const [modal, setModal] = useState<DialogType>(DefaultModalConfigs);
 
+  const [model, setModel] = useState<string>('');
+
   const handleSnackBarClose = () => {
     setSnackBar(v => ({ ...v, open: false }));
   };
@@ -454,6 +458,8 @@ export const RootProvider = (props: { children: React.ReactNode }) => {
         setIsShowMobileMask,
         userId,
         trackingEvent,
+        model,
+        setModel,
       }}
     >
       <ThemeProvider theme={isMobile ? mobileTheme : theme}>

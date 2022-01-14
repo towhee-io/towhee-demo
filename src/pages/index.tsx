@@ -83,7 +83,7 @@ const Home = () => {
     try {
       const [duration = 0, res] = await search(fd, params);
 
-      setDuration(Math.round(duration * 1000));
+      setDuration(Math.round(duration * 100));
       if (!res.length) {
         setNoData(true);
         return;
@@ -100,7 +100,6 @@ const Home = () => {
   };
 
   const searchImgByBlob = (src: string, model: string) => {
-    console.log('model---', model);
     const image = document.createElement('img');
     image.crossOrigin = '';
     image.src = src;
@@ -148,12 +147,12 @@ const Home = () => {
     [model]
   );
 
-  const handleModelChange = value => {
+  const handleModelChange = (value: string) => {
     setModel(value);
     if (selected.src) {
       searchImgByBlob(selected.src, value);
     } else {
-      searchImgByBlob('/images/demo.jpg', value);
+      searchImgByBlob('/images/demo.jpeg', value);
     }
   };
 
@@ -172,12 +171,12 @@ const Home = () => {
 
   useEffect(() => {
     setSelected({
-      src: '/images/demo.jpg',
+      src: '/images/demo.jpeg',
       isSelected: true,
     });
     (async () => {
       const model = await getImgsCount();
-      searchImgByBlob('/images/demo.jpg', model);
+      searchImgByBlob('/images/demo.jpeg', model);
     })();
   }, []);
 
