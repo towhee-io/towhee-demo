@@ -9,6 +9,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useCheckIsMobile } from '../../../hooks/Style';
+import { ContactsOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => ({
   cropper: () => ({
@@ -78,19 +79,22 @@ const CroppeDemo = props => {
     cropperRef.current.model = model;
   }, [model]);
 
-  return (
-    <div className={classes.cropper}>
-      <Cropper
-        key={model}
-        src={src}
-        style={{ height: 'auto', width: '100%' }}
-        // Cropper.js options
-        autoCropArea={1}
-        guides={true}
-        crop={onCrop}
-        ref={cropperRef}
-      />
-    </div>
+  return useMemo(
+    () => (
+      <div className={classes.cropper}>
+        <Cropper
+          key={model}
+          src={src}
+          style={{ height: 'auto', width: '100%' }}
+          // Cropper.js options
+          autoCropArea={1}
+          guides={true}
+          crop={onCrop}
+          ref={cropperRef}
+        />
+      </div>
+    ),
+    [cropAndSearch, src, model]
   );
 };
 export default CroppeDemo;

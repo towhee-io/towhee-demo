@@ -72,22 +72,22 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
   const generateDrainageContent = () => (
     <div className={classes.drainageContent}>
       <Typography variant="body1" component="p" className={classes.text}>
-        Want to learn the techniques behind the scene see the{' '}
+        Want to learn the techniques behind the scene? See the{' '}
         <Link href="https://docs.towhee.io/tutorials/reverse-image-search">
           tutorial
         </Link>
         .
       </Typography>
 
-      <div>
+      <div style={{ marginTop: '16px' }}>
         <Typography variant="body1" component="p" className={classes.text}>
-          demo resource:
+          Demo resource:
         </Typography>
         <Typography variant="body1" component="p" className={classes.text}>
-          source code: <Link>https://github.com/towhee-io/towhee</Link>.
+          Source code: <Link>https://github.com/towhee-io/towhee</Link>.
         </Typography>
         <Typography variant="body1" component="p" className={classes.text}>
-          docker image:
+          Docker image:
         </Typography>
       </div>
     </div>

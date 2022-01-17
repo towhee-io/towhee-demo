@@ -4,8 +4,8 @@ import React, {
   useContext,
   useRef,
   useCallback,
+  useMemo,
 } from 'react';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { CircularProgress, Link, Typography } from '@material-ui/core';
 import { rootContext } from '../context/Root';
 import {
@@ -62,6 +62,7 @@ const Home = () => {
     reset: boolean = false,
     pageIndex: number | null
   ) => {
+    console.log('start request');
     setLoading(true);
     setDuration('searching...');
     let tempPage = page;
@@ -75,7 +76,7 @@ const Home = () => {
     fd.append('image', file);
     const params = {
       table_name: model || 'efficientnetb5',
-      device: `${isMobile ? 'mobile' : 'pc'}` as DeviceType,
+      device: `${window.innerWidth < 800 ? 'mobile' : 'pc'}` as DeviceType,
       page: pageIndex || tempPage,
       num: window.innerWidth < 800 ? 32 : 50,
     };
@@ -176,7 +177,7 @@ const Home = () => {
     });
     (async () => {
       const model = await getImgsCount();
-      searchImgByBlob('/images/demo.jpeg', model);
+      // searchImgByBlob('/images/demo.jpeg', model);
     })();
   }, []);
 
