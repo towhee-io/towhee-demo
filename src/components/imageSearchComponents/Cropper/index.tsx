@@ -52,12 +52,6 @@ const CroppeDemo = props => {
   const { cropAndSearch, src, className, imgClassName, model = '' } = props;
   const classes = useStyles();
   const cropperRef = useRef<any>(null);
-  const [cropData, setCropData] = useState({
-    x: 0,
-    y: 0,
-    width: '100%',
-    height: '100%',
-  });
 
   let onCrop = () => {
     const imageElement: any = cropperRef?.current;
@@ -82,24 +76,16 @@ const CroppeDemo = props => {
 
   useEffect(() => {
     cropperRef.current.model = model;
-
-    setCropData({
-      x: 0,
-      y: 0,
-      width: '100%',
-      height: '100%',
-    });
   }, [model]);
 
   return (
     <div className={classes.cropper}>
       <Cropper
+        key={model}
         src={src}
         style={{ height: 'auto', width: '100%' }}
         // Cropper.js options
         autoCropArea={1}
-        autoCrop={true}
-        data={cropData}
         guides={true}
         crop={onCrop}
         ref={cropperRef}

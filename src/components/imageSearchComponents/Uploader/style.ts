@@ -49,7 +49,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     boxSizing: 'border-box',
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
-      display: 'block',
+      flexDirection: 'column',
     },
 
     '& .right': {
