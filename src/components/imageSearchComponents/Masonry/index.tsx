@@ -82,8 +82,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       },
 
       '&::after': {
-        content:
-          '"The results are sorted by normalized L2 distance, range from 0 to 2, smaller is better."',
+        content: '"range from 0 to 2, smaller is better."',
         background: '#232F34',
         borderRadius: '4px',
         padding: '5px 10px',
@@ -93,16 +92,16 @@ const useStyles = makeStyles((theme: Theme) => ({
         position: 'absolute',
         visibility: 'hidden',
         opacity: 0,
-        // left: '50%',
-        // transform: 'translateX(-50%)',
-        // top: '32px',
+
         top: '50%',
-        transform: 'translateY(-50%)',
+        transform: 'translate(0,-50%)',
         left: '32px',
         whiteSpace: 'nowrap',
 
         [theme.breakpoints.down('sm')]: {
-          top: '34px',
+          left: '50%',
+          transform: 'translate(-40%,0)',
+          top: '32px',
         },
       },
 
@@ -141,7 +140,7 @@ const Main: React.FC<MainPropsType> = ({
       <div className={`${classes.scrollContainer} ${isShowCode ? 'open' : ''}`}>
         <div className={`${classes.toopTip} ${isSelected ? 'open' : ''}`}>
           <Typography variant="h4" className="body1" component="p">
-            Sorted by Similarity metric
+            The results are sorted by normalized L2 distance
           </Typography>
           <span className="icon-wrapper">
             <ErrorOutlineIcon />
