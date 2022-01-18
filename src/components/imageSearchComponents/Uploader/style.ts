@@ -192,6 +192,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
   text: {
     fontSize: '16px',
     lineHeight: '26px',
+    fontFamily: 'Poppins',
+    fontWeight: 'bold',
 
     [theme.breakpoints.down(theme.breakpoints.values.md)]: {
       fontSize: '14px',
