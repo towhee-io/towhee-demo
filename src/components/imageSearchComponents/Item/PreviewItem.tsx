@@ -116,21 +116,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 type PreviewItemPropsType = {
   src: string;
   distance: number;
-  handleSearch: (param: string) => void;
 };
 
-const PreviewItem: React.FC<PreviewItemPropsType> = ({
-  src,
-  distance,
-  handleSearch,
-}) => {
-  const { handleClosePreviewDialog } = useContext(rootContext);
+const PreviewItem: React.FC<any> = ({ src, distance }) => {
+  const { handleClosePreviewDialog, handleSelectFile } =
+    useContext(rootContext);
   const isMobile = useCheckIsMobile();
   const classes = useStyles();
   const [loading, setLoding] = useState(true);
 
   const handleClickSearch = () => {
-    handleSearch(src);
+    console.log(src);
+    handleSelectFile(src);
     handleClosePreviewDialog();
   };
 

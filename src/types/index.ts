@@ -5,7 +5,7 @@ export type UploaderHeaderType = {
     reset?: boolean,
     scrollPage?: number | null
   ) => void;
-  handleSelectedImg: (file: File, src: string) => void;
+  handleSelectedImg: (file: File) => void;
   toggleIsShowCode: () => void;
   selectedImg: {
     src: string;

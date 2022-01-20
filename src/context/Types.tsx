@@ -25,7 +25,9 @@ export type RootContextType = {
   userId: string;
   trackingEvent: (event: TrackingEventType, params: TrackingParams) => void;
   model: string;
-  setModel: (params: string) => void;
+  setModel: React.Dispatch<React.SetStateAction<string>>;
+  fileSrc: { src: string; file: File | Blob; isSelected: boolean };
+  handleSelectFile: (param: string | File | Blob) => void;
 };
 
 export type DialogType = {

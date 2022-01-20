@@ -4,25 +4,21 @@ import React, {
   useMemo,
   useState,
   useCallback,
+  useContext,
 } from 'react';
+import { rootContext } from '../../../context/Root';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { useCheckIsMobile } from '../../../hooks/Style';
-import { ContactsOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => ({
   cropper: () => ({
     width: '247px',
     height: 'auto',
+    minHeight: '100px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-
-    '&>img': {
-      width: '100%',
-      height: '100%',
-    },
 
     [theme.breakpoints.down('sm')]: {
       width: '306px',
@@ -49,14 +45,14 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 let timer: ReturnType<typeof setTimeout> = null;
 
-const CroppeDemo = props => {
-  const { cropAndSearch, src, className, imgClassName, model = '' } = props;
+const CroppeDemo = (props: any) => {
+  const { cropAndSearch, model } = props;
   const classes = useStyles();
   const cropperRef = useRef<any>(null);
+  const { fileSrc } = useContext(rootContext);
 
   let onCrop = () => {
     const imageElement: any = cropperRef?.current;
-
     const cropper: any = imageElement?.cropper;
     const model: any = imageElement?.model;
 
@@ -69,6 +65,7 @@ const CroppeDemo = props => {
       }
       cropper.getCroppedCanvas().toBlob(
         blob => {
+          console.log('oncrop execute!');
           cropAndSearch(blob, model, true, null);
         } /*, 'image/png' */
       );
@@ -83,8 +80,8 @@ const CroppeDemo = props => {
     () => (
       <div className={classes.cropper}>
         <Cropper
-          key={model}
-          src={src}
+          key={`${model}${fileSrc.src}`}
+          src={fileSrc.src}
           style={{ height: 'auto', width: '100%' }}
           // Cropper.js options
           autoCropArea={1}
@@ -94,7 +91,7 @@ const CroppeDemo = props => {
         />
       </div>
     ),
-    [cropAndSearch, src, model]
+    [cropAndSearch, model]
   );
 };
 export default CroppeDemo;

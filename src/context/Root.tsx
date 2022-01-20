@@ -16,6 +16,11 @@ import lightBlue from '@material-ui/core/colors/lightBlue';
 import CustomModal from '../components/customDialog/CustomModal';
 import { uuid } from 'uuidv4';
 import ImagePreviewDialog from '../components/imageSearchComponents/CustomDialog';
+import {
+  getImgUrl,
+  convertBase64UrlToBlob,
+  getBase64Image,
+} from '../utils/helper';
 
 const COOKIE_UUID = 'z_uuid';
 let amplitude: any = null;
@@ -76,7 +81,13 @@ export const rootContext = React.createContext<RootContextType>({
   userId: '',
   trackingEvent: (event: TrackingEventType, params: {}) => {},
   model: '',
-  setModel: () => {},
+  setModel: (param: string) => {},
+  fileSrc: {
+    src: '',
+    file: null,
+    isSelected: false,
+  },
+  handleSelectFile: (param: File | Blob | string) => {},
 });
 
 const commonThemes = {
@@ -375,6 +386,41 @@ export const RootProvider = (props: { children: React.ReactNode }) => {
   const [modal, setModal] = useState<DialogType>(DefaultModalConfigs);
 
   const [model, setModel] = useState<string>('');
+  const [fileSrc, setFileSrc] = useState<{
+    src: string;
+    file: File | Blob;
+    isSelected: boolean;
+  }>({
+    src: '',
+    file: null,
+    isSelected: false,
+  });
+
+  const handleSelectFile = (file: string | File | Blob) => {
+    if (typeof file === 'string') {
+      let image = new Image();
+      image.crossOrigin = 'Anonymous';
+      image.src = file;
+      image.onload = () => {
+        console.log('new image loaded');
+        const base64 = getBase64Image(image);
+        const blob = convertBase64UrlToBlob(base64);
+        console.log('blob--', blob);
+        setFileSrc({
+          src: file,
+          file: blob,
+          isSelected: true,
+        });
+      };
+    } else {
+      let src = getImgUrl(file);
+      setFileSrc({
+        src: src,
+        file: file,
+        isSelected: true,
+      });
+    }
+  };
 
   const handleSnackBarClose = () => {
     setSnackBar(v => ({ ...v, open: false }));
@@ -460,6 +506,8 @@ export const RootProvider = (props: { children: React.ReactNode }) => {
         trackingEvent,
         model,
         setModel,
+        fileSrc,
+        handleSelectFile,
       }}
     >
       <ThemeProvider theme={isMobile ? mobileTheme : theme}>

@@ -27,34 +27,19 @@ import { useStyles } from '../styles/demo';
 const Home = () => {
   formatCount(134200);
   const classes = useStyles();
-  const { setDialog, dialog } = useContext(rootContext);
+  const { model, fileSrc, handleSelectFile } = useContext(rootContext);
   const [imgs, setImgs] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [partialLoading, setPartialLoading] = useState(false);
-  const [selected, setSelected] = useState({
-    src: '',
-    isSelected: false,
-  });
-  const [count, setCount] = useState('');
+
   const [duration, setDuration] = useState<number | string>('searching...');
-  const [file, setFile] = useState<any>(null!);
-  const [isShowCode, setIsShowCode] = useState(false);
+
   const [noData, setNoData] = useState(false);
   const scrollContainer = useRef(null);
   const isMobile = useCheckIsMobile();
 
   const [modelOptions, setModelOptions] = useState<string[]>([]);
-  const [model, setModel] = useState<string>('');
-
-  const handleSelectedImg = (file: File | Blob) => {
-    setFile(file);
-    const src = getImgUrl(file);
-    setSelected({
-      src,
-      isSelected: true,
-    });
-  };
 
   const handleImgSearch = async (
     file: File | Blob,
@@ -62,7 +47,6 @@ const Home = () => {
     reset: boolean = false,
     pageIndex: number | null
   ) => {
-    console.log('start request');
     setLoading(true);
     setDuration('searching...');
     let tempPage = page;
@@ -100,14 +84,14 @@ const Home = () => {
     }
   };
 
-  const searchImgByBlob = (src: string, model: string) => {
+  const searchImgByImagePath = (src: string, model: string) => {
     const image = document.createElement('img');
     image.crossOrigin = '';
     image.src = src;
-    image.onload = async () => {
+    image.onload = () => {
       const base64 = getBase64Image(image);
       const imgBlob = convertBase64UrlToBlob(base64);
-      setFile(imgBlob);
+      handleSelectFile(src);
       handleImgSearch(imgBlob, model, true, null);
     };
   };
@@ -117,7 +101,7 @@ const Home = () => {
     async () => {
       try {
         setPartialLoading(true);
-        await handleImgSearch(file, model, false, page);
+        await handleImgSearch(fileSrc.file, model, false, page);
       } catch (error) {
         console.log(error);
       } finally {
@@ -125,61 +109,8 @@ const Home = () => {
       }
     },
     // eslint-disable-next-line
-    [file, page]
+    [handleImgSearch]
   );
-
-  const toggleIsShowCode = () => {
-    setIsShowCode(v => !v);
-    window.dispatchEvent(new Event('resize'));
-  };
-
-  // reduce unnecessary rerendering
-  const handleSearch = useCallback(
-    src => {
-      setNoData(true);
-      setLoading(true);
-      searchImgByBlob(src, model);
-      setSelected({
-        src: src,
-        isSelected: true,
-      });
-    },
-    // eslint-disable-next-line
-    [model]
-  );
-
-  const handleModelChange = (value: string) => {
-    setModel(value);
-    if (selected.src) {
-      searchImgByBlob(selected.src, value);
-    } else {
-      searchImgByBlob('/images/demo.jpeg', value);
-    }
-  };
-
-  const getImgsCount = async () => {
-    try {
-      const { model_list: options = [] } = await getModelOptions();
-      setModelOptions(options);
-      setModel(options[0]);
-      const count = await getCount(options[0]);
-      setCount(formatCount(count));
-      return options[0];
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    setSelected({
-      src: '/images/demo.jpeg',
-      isSelected: true,
-    });
-    (async () => {
-      const model = await getImgsCount();
-      // searchImgByBlob('/images/demo.jpeg', model);
-    })();
-  }, []);
 
   return (
     <section className={classes.root} ref={scrollContainer}>
@@ -191,34 +122,12 @@ const Home = () => {
         {/* <meta name="description" content={imageSearchDemo} /> */}
       </Head>
       <div className={classes.container}>
-        <div
-          className={`${classes.contentContainer} ${
-            isShowCode ? 'shrink' : ''
-          }`}
-        >
+        <div className={classes.contentContainer}>
           <div className="top-part">
-            {/* <Link
-              href="/milvus-demos"
-              className={classes.backLink}
-              underline="none"
-            >
-              <>
-                <ChevronLeftIcon />
-                <Typography variant="h4" className="back-btn" component="span">
-                  Back to Demo
-                </Typography>
-              </>
-            </Link> */}
             <UploaderHeader
-              searchImg={handleImgSearch}
-              handleSelectedImg={handleSelectedImg}
-              toggleIsShowCode={toggleIsShowCode}
-              selectedImg={selected}
-              count={count}
+              searchImgByFile={handleImgSearch}
+              searchImgByPath={searchImgByImagePath}
               duration={duration}
-              modelOptions={modelOptions}
-              model={model}
-              setModel={handleModelChange}
             />
           </div>
 
@@ -233,16 +142,10 @@ const Home = () => {
               pins={imgs}
               loadItems={loadItems}
               loading={partialLoading}
-              isSelected={selected.isSelected}
-              isShowCode={isShowCode}
-              handleSearch={handleSearch}
               container={scrollContainer}
-              model={model}
             />
           )}
         </div>
-
-        {isShowCode ? <div className={classes.codeContainer}>123</div> : null}
       </div>
       {loading && !partialLoading ? (
         <div className={classes.loadingWrapper}>

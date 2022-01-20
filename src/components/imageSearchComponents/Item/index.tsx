@@ -112,37 +112,32 @@ type ItemPropsType = {
     distance: number;
   };
   isSelected: boolean;
-  handleSearch: (param: string) => void;
-  model: string;
 };
-const Item: React.FC<ItemPropsType> = props => {
+const Item: React.FC<any> = props => {
   const {
     data: { height, width, src, distance },
-    model,
   } = props;
-  const image_path = src.replace(/(pc|mobile)\?/, `raw?table_name=${model}`);
-
-  const { setPreviewDialog, handleClosePreviewDialog } =
-    useContext(rootContext);
   const classes = useStyles();
+  const {
+    setPreviewDialog,
+    handleClosePreviewDialog,
+    model,
+    handleSelectFile,
+  } = useContext(rootContext);
+
+  const image_path = src.replace(/(pc|mobile)\?/, `raw?table_name=${model}`);
 
   const handlePreview = async () => {
     setPreviewDialog({
       open: true,
-      component: (
-        <PreviewItem
-          src={image_path}
-          distance={distance}
-          handleSearch={props.handleSearch}
-        />
-      ),
+      component: <PreviewItem src={image_path} distance={distance} />,
       onClose: handleClosePreviewDialog,
     });
   };
 
   const searchThisPic = (e: React.MouseEvent<HTMLSpanElement>, src: string) => {
     e.stopPropagation();
-    props.handleSearch(image_path);
+    handleSelectFile(image_path);
   };
 
   return (

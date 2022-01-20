@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useContext } from 'react';
+import { rootContext } from '../../../context/Root';
 import { Masonry } from 'gestalt';
 import { CircularProgress, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   imgContainer: {
-    marginTop: '34px',
+    marginTop: '24px',
     '&.open': {
       width: '50%',
     },
@@ -54,60 +55,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     visibility: 'hidden',
-    position: 'absolute',
 
     '&.open': {
       visibility: 'visible',
-    },
-
-    '& .icon-wrapper': {
-      height: '26px',
-      width: '26px',
-      fontSize: '16px',
-      marginLeft: '8px',
-      cursor: 'pointer',
-      borderRadius: '50%',
-      position: 'relative',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-
-      '&:hover': {
-        background: '#E9E9ED',
-        '&::after': {
-          visibility: 'visible',
-          opacity: 1,
-          zIndex: 1,
-        },
-      },
-
-      '&::after': {
-        content: '"range from 0 to 2, smaller is better."',
-        background: '#232F34',
-        borderRadius: '4px',
-        padding: '5px 10px',
-        fontSize: '12px',
-        lineHeight: '14px',
-        color: '#fff',
-        position: 'absolute',
-        visibility: 'hidden',
-        opacity: 0,
-
-        top: '50%',
-        transform: 'translate(0,-50%)',
-        left: '32px',
-        whiteSpace: 'nowrap',
-
-        [theme.breakpoints.down('sm')]: {
-          left: '50%',
-          transform: 'translate(-40%,0)',
-          top: '32px',
-        },
-      },
-
-      '& svg': {
-        fontSize: '16px',
-      },
     },
   },
 }));
@@ -118,33 +68,24 @@ type MainPropsType = {
   loading: boolean;
   isSelected: boolean;
   isShowCode: boolean;
-  handleSearch: (param: string) => void;
+  rechooseFile: (param: any) => void;
   container: any;
-  model: string;
 };
-const Main: React.FC<MainPropsType> = ({
-  pins,
-  loadItems,
-  loading,
-  isSelected,
-  isShowCode,
-  handleSearch,
-  container,
-  model,
-}) => {
+const Main: React.FC<any> = ({ pins, loadItems, loading, container }) => {
   const classes = useStyles();
   const isMobile = useCheckIsMobile();
+  const { fileSrc } = useContext(rootContext);
 
   return useMemo(
     () => (
-      <div className={`${classes.scrollContainer} ${isShowCode ? 'open' : ''}`}>
-        <div className={`${classes.toopTip} ${isSelected ? 'open' : ''}`}>
+      <div className={classes.scrollContainer}>
+        <div
+          className={`${classes.toopTip} ${fileSrc.isSelected ? 'open' : ''}`}
+        >
           <Typography variant="h4" className="body1" component="p">
-            The results are sorted by normalized L2 distance
+            The results are sorted by normalized L2 distance, range from 0 to 2,
+            smaller is better.
           </Typography>
-          <span className="icon-wrapper">
-            <ErrorOutlineIcon />
-          </span>
         </div>
 
         <div className={classes.imgContainer}>
@@ -153,12 +94,7 @@ const Main: React.FC<MainPropsType> = ({
               columnWidth={isMobile ? 154 : 290}
               virtualize={false}
               comp={({ data }) => (
-                <Item
-                  data={data}
-                  isSelected={isSelected}
-                  handleSearch={handleSearch}
-                  model={model}
-                />
+                <Item data={data} isSelected={fileSrc.isSelected} />
               )}
               items={pins}
               gutterWidth={16}
@@ -175,16 +111,7 @@ const Main: React.FC<MainPropsType> = ({
         ) : null}
       </div>
     ),
-    [
-      pins,
-      loadItems,
-      loading,
-      isSelected,
-      isShowCode,
-      handleSearch,
-      container,
-      isMobile,
-    ]
+    [pins, loadItems, loading, container, isMobile]
   );
 };
 

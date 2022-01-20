@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import {
   Button,
   Typography,
@@ -9,65 +9,59 @@ import {
   Link,
 } from '@material-ui/core';
 import { getImgUrl } from '../../../utils/helper';
-import { FileDrop } from 'react-file-drop';
 import Cropper from '../Cropper';
 import { useCheckIsMobile } from '../../../hooks/Style';
 import { useStyles } from './style';
 import { UploaderHeaderType } from '../../../types';
+import { getModelOptions, getCount } from '../../../utils/http';
+import { formatCount } from '../../../utils/helper';
+import { rootContext } from '../../../context/Root';
 
-const UploaderHeader: React.FC<UploaderHeaderType> = ({
-  searchImg,
-  handleSelectedImg,
-  toggleIsShowCode,
-  selectedImg,
-  count,
+const UploaderHeader: React.FC<any> = ({
+  searchImgByFile,
+  searchImgByPath,
   duration,
-  modelOptions,
-  model,
-  setModel,
 }) => {
-  const classes = useStyles({ selectedImg });
+  const classes = useStyles();
   const isMobile = useCheckIsMobile();
+  const [model, setModel] = useState<string>('');
+  const [modelOptions, setModelOptions] = useState<string[]>([]);
+  const [count, setCount] = useState<string>('0');
   const inputRef = useRef<HTMLInputElement>(null!);
   const uploadSection = useRef(null);
+  const root = useContext(rootContext);
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = inputRef.current.files[0] || '';
     if (!file) return;
-    const src: string = getImgUrl(file);
-
-    handleSelectedImg(file, src);
-    searchImg(file, model, true, null);
+    root.handleSelectFile(file);
     e.target.value = '';
-  };
-
-  const handleDrop = (
-    files: FileList,
-    event: React.DragEvent<HTMLDivElement>
-  ) => {
-    event.preventDefault();
-    uploadSection.current.classList.remove('drag-enter');
-    if (!files[0]) {
-      return;
-    }
-    const src = getImgUrl(files[0]);
-    handleSelectedImg(files[0], src);
-    searchImg(files[0], model, true, null);
-  };
-
-  const handlerDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    uploadSection.current.classList.add('drag-enter');
-  };
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    uploadSection.current.classList.remove('drag-enter');
   };
 
   const handleModelChange = (e: React.ChangeEvent<{ value: string }>) => {
     const { value } = e.target;
     setModel(value);
+    root.setModel(value);
   };
+
+  const getInitialParams = async () => {
+    try {
+      const { model_list: options = [] } = await getModelOptions();
+      setModelOptions(options);
+      setModel(options[0]);
+      root.setModel(options[0]);
+      const count = await getCount(options[0]);
+      setCount(formatCount(count));
+      // searchImgByPath('/images/demo.jpeg', model);
+      root.handleSelectFile('/images/demo.jpeg');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getInitialParams();
+  }, []);
 
   const generateDrainageContent = () => (
     <div className={classes.drainageContent}>
@@ -138,16 +132,12 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
     );
   };
 
-  const generateSelectedHeader = (selectedImg: {
-    src: string;
-    isSelected: boolean;
-  }) => {
+  const generateSelectedHeader = () => {
     return (
       <div className={classes.selectedHeader}>
         <div className={classes.cropperWrapper}>
           <Cropper
-            src={selectedImg.src}
-            cropAndSearch={searchImg}
+            cropAndSearch={searchImgByFile}
             className={classes.cropImgWrapper}
             imgClassName={classes.cropImg}
             model={model}
@@ -213,7 +203,7 @@ const UploaderHeader: React.FC<UploaderHeaderType> = ({
         generateSelectedHeader(selectedImg)
       )} */}
 
-      {generateSelectedHeader(selectedImg)}
+      {generateSelectedHeader()}
       {generateDrainageContent()}
     </section>
   );
