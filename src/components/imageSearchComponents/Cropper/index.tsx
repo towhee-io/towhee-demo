@@ -65,7 +65,6 @@ const CroppeDemo = (props: any) => {
       }
       cropper.getCroppedCanvas().toBlob(
         blob => {
-          console.log('oncrop execute!');
           cropAndSearch(blob, model, true, null);
         } /*, 'image/png' */
       );

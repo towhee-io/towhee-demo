@@ -402,10 +402,8 @@ export const RootProvider = (props: { children: React.ReactNode }) => {
       image.crossOrigin = 'Anonymous';
       image.src = file;
       image.onload = () => {
-        console.log('new image loaded');
         const base64 = getBase64Image(image);
         const blob = convertBase64UrlToBlob(base64);
-        console.log('blob--', blob);
         setFileSrc({
           src: file,
           file: blob,

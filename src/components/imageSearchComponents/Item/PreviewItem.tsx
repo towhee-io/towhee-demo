@@ -126,7 +126,6 @@ const PreviewItem: React.FC<any> = ({ src, distance }) => {
   const [loading, setLoding] = useState(true);
 
   const handleClickSearch = () => {
-    console.log(src);
     handleSelectFile(src);
     handleClosePreviewDialog();
   };
