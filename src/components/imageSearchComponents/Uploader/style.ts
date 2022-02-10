@@ -139,7 +139,20 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   iconsWrapper: {
+    '& img': {
+      width: '24px',
+      height: '24px',
+    },
+
+    '& a': {
+      display: 'inline-block',
+      fontSize: 0,
+      lineHeight: 0,
+    },
+
     marginBottom: theme.spacing(0),
+    display: 'flex',
+    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       marginBottom: theme.spacing(1),
     },

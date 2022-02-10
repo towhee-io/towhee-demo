@@ -66,7 +66,8 @@ const UploaderHeader: React.FC<any> = ({
   const generateDrainageContent = () => (
     <div className={classes.drainageContent}>
       <Typography variant="body1" component="p" className={classes.text}>
-        Want to learn the techniques behind the scene? See the{' '}
+        Want to learn the techniques behind the scene? <br />
+        See the{' '}
         <Link href="https://docs.towhee.io/tutorials/reverse-image-search">
           tutorial
         </Link>
@@ -78,11 +79,15 @@ const UploaderHeader: React.FC<any> = ({
           Demo resource:
         </Typography>
         <Typography variant="body1" component="p" className={classes.text}>
-          Source code: <Link>https://github.com/towhee-io/towhee</Link>.
+          Source code:{' '}
+          <Link href="https://github.com/towhee-io/towhee">
+            https://github.com/towhee-io/towhee
+          </Link>
+          .
         </Typography>
-        <Typography variant="body1" component="p" className={classes.text}>
+        {/* <Typography variant="body1" component="p" className={classes.text}>
           Docker image:
-        </Typography>
+        </Typography> */}
       </div>
     </div>
   );
@@ -159,21 +164,26 @@ const UploaderHeader: React.FC<any> = ({
               </Typography>
             </div>
             <div className={classes.iconsWrapper}>
-              <Link href="https://github.com/milvus-io/milvus">
+              <Link href="https://github.com/towhee-io/towhee">
                 <img
                   src={'/images/reverse-image-search/github.svg'}
                   alt="github"
                 />
               </Link>
 
-              {!isMobile && (
-                <Link href="https://github.com/milvus-io/milvus">
-                  <img
-                    src={'/images/reverse-image-search/email.svg'}
-                    alt="email"
-                  />
-                </Link>
-              )}
+              <Link href="https://twitter.com/towheeio">
+                <img
+                  src={'/images/reverse-image-search/twitter.svg'}
+                  alt="github"
+                />
+              </Link>
+
+              <Link href="https://slack.towhee.io">
+                <img
+                  src={'/images/reverse-image-search/slack.svg'}
+                  alt="github"
+                />
+              </Link>
             </div>
           </div>
         </div>
