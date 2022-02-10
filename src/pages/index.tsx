@@ -37,9 +37,6 @@ const Home = () => {
 
   const [noData, setNoData] = useState(false);
   const scrollContainer = useRef(null);
-  const isMobile = useCheckIsMobile();
-
-  const [modelOptions, setModelOptions] = useState<string[]>([]);
 
   const handleImgSearch = async (
     file: File | Blob,

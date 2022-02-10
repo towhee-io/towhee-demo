@@ -47,6 +47,7 @@ let timer: ReturnType<typeof setTimeout> = null;
 
 const CroppeDemo = (props: any) => {
   const { cropAndSearch, model } = props;
+
   const classes = useStyles();
   const cropperRef = useRef<any>(null);
   const { fileSrc } = useContext(rootContext);
@@ -54,8 +55,6 @@ const CroppeDemo = (props: any) => {
   let onCrop = () => {
     const imageElement: any = cropperRef?.current;
     const cropper: any = imageElement?.cropper;
-    const model: any = imageElement?.model;
-
     if (timer) {
       clearTimeout(timer);
     }
@@ -65,15 +64,11 @@ const CroppeDemo = (props: any) => {
       }
       cropper.getCroppedCanvas().toBlob(
         blob => {
-          cropAndSearch(blob, model, true, null);
+          cropAndSearch(blob, props.model, true, null);
         } /*, 'image/png' */
       );
     }, 1000);
   };
-
-  useEffect(() => {
-    cropperRef.current.model = model;
-  }, [model]);
 
   return useMemo(
     () => (
