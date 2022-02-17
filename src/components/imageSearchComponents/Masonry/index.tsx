@@ -91,7 +91,7 @@ const Main: React.FC<any> = ({ pins, loadItems, loading, container }) => {
         <div className={classes.imgContainer}>
           {pins.length ? (
             <Masonry
-              columnWidth={isMobile ? 154 : 290}
+              columnWidth={isMobile ? 139 : 290}
               virtualize={false}
               comp={({ data }) => (
                 <Item data={data} isSelected={fileSrc.isSelected} />

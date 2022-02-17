@@ -61,18 +61,12 @@ export const useStyles = makeStyles((theme: Theme) => ({
     background: '#555',
     borderRadius: '8px',
     boxSizing: 'border-box',
-    padding: theme.spacing(2),
-    width: '279px',
+    padding: theme.spacing(1),
+    width: '343px',
     maxWidth: '60%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(1),
-      maxWidth: '343px',
-      width: '100%',
-    },
   },
   btnsWrapper: {
     display: 'flex',
@@ -140,14 +134,15 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   iconsWrapper: {
     '& img': {
-      width: '24px',
-      height: '24px',
+      width: '20px',
+      height: '20px',
     },
 
     '& a': {
       display: 'inline-block',
       fontSize: 0,
       lineHeight: 0,
+      padding: theme.spacing(0.5),
     },
 
     marginBottom: theme.spacing(0),

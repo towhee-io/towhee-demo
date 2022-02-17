@@ -13,16 +13,12 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   cropper: () => ({
-    width: '247px',
+    width: '306px',
     height: 'auto',
     minHeight: '100px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-
-    [theme.breakpoints.down('sm')]: {
-      width: '306px',
-    },
 
     '& .cropper-line': {
       backgroundColor: ' #fff',
@@ -82,6 +78,7 @@ const CroppeDemo = (props: any) => {
           guides={true}
           crop={onCrop}
           ref={cropperRef}
+          responsive={false}
         />
       </div>
     ),

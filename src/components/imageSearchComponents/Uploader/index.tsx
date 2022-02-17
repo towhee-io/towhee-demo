@@ -85,9 +85,13 @@ const UploaderHeader: React.FC<any> = ({
           </Link>
           .
         </Typography>
-        {/* <Typography variant="body1" component="p" className={classes.text}>
-          Docker image:
-        </Typography> */}
+        <Typography variant="body1" component="p" className={classes.text}>
+          image dataset:{' '}
+          <Link href="https://image-net.org/challenges/LSVRC/2012/">
+            ImageNet2012
+          </Link>
+          .
+        </Typography>
       </div>
     </div>
   );
@@ -141,12 +145,7 @@ const UploaderHeader: React.FC<any> = ({
     return (
       <div className={classes.selectedHeader}>
         <div className={classes.cropperWrapper}>
-          <Cropper
-            cropAndSearch={searchImgByFile}
-            className={classes.cropImgWrapper}
-            imgClassName={classes.cropImg}
-            model={model}
-          ></Cropper>
+          <Cropper cropAndSearch={searchImgByFile} model={model}></Cropper>
         </div>
 
         <div className={classes.btnsWrapper}>
