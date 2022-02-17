@@ -86,7 +86,7 @@ const UploaderHeader: React.FC<any> = ({
           .
         </Typography>
         <Typography variant="body1" component="p" className={classes.text}>
-          image dataset:{' '}
+          Image dataset:{' '}
           <Link href="https://image-net.org/challenges/LSVRC/2012/">
             ImageNet2012
           </Link>
