@@ -112,10 +112,7 @@ const Home = () => {
   return (
     <section className={classes.root} ref={scrollContainer}>
       <Head>
-        <title>
-          Milvus Reverse Image Search - Open-Source Vector Similarity
-          Application Demo
-        </title>
+        <title>Towhee - Open-Source Vector Similarity Application Demo</title>
         {/* <meta name="description" content={imageSearchDemo} /> */}
       </Head>
       <div className={classes.container}>
